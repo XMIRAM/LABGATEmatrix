@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LABGATE — Matrix Access</title>
+<title>LABGATE — System Access</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -17,11 +17,12 @@ body {
   overflow: hidden;
 }
 
-/* ===== MATRIX CANVAS ===== */
+/* ===== MATRIX BACKGROUND ===== */
 canvas {
   position: fixed;
   inset: 0;
   z-index: 0;
+  opacity: 0.15; /* <<< ГЛАВНОЕ */
 }
 
 /* ===== LOADER ===== */
@@ -33,14 +34,14 @@ canvas {
   justify-content: center;
   align-items: center;
   z-index: 5;
-  animation: fadeOut 1s ease forwards;
-  animation-delay: 2.2s;
+  flex-direction: column;
+  font-family: monospace;
 }
 
 .loader span {
   color: #00ff88;
-  letter-spacing: 4px;
   font-size: 14px;
+  letter-spacing: 3px;
   animation: blink 1.2s infinite;
 }
 
@@ -49,37 +50,32 @@ canvas {
   50% { opacity: 1; }
 }
 
-@keyframes fadeOut {
-  to { opacity: 0; visibility: hidden; }
-}
-
-/* ===== CONTENT ===== */
+/* ===== MAIN ===== */
 .container {
   position: relative;
   z-index: 2;
-  max-width: 460px;
+  max-width: 420px;
   margin: auto;
   padding: 30px;
   text-align: center;
   opacity: 0;
-  animation: rise 1.2s ease forwards;
-  animation-delay: 2.4s;
+  animation: show 1s ease forwards;
+  animation-delay: 3s;
 }
 
-@keyframes rise {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes show {
+  to { opacity: 1; }
 }
 
 /* ===== AVATAR ===== */
 .avatar {
-  width: 130px;
-  height: 130px;
-  margin: 0 auto 20px;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 18px;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid rgba(0,255,136,0.6);
-  box-shadow: 0 0 45px rgba(0,255,136,0.35);
+  border: 2px solid rgba(0,255,136,0.5);
+  box-shadow: 0 0 40px rgba(0,255,136,0.3);
 }
 
 .avatar img {
@@ -88,91 +84,60 @@ canvas {
   object-fit: cover;
 }
 
+/* ===== TEXT ===== */
 .logo {
-  font-size: 46px;
+  font-size: 44px;
   letter-spacing: 5px;
-  margin-bottom: 10px;
-  background: linear-gradient(90deg, #00ff88, #00cc66);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #00ff88;
 }
 
 .subtitle {
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 2px;
   opacity: 0.7;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .panel {
-  background: rgba(0,0,0,0.6);
-  border: 1px solid rgba(0,255,136,0.25);
-  border-radius: 16px;
-  padding: 24px;
+  background: rgba(0,0,0,0.75);
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 14px;
+  padding: 22px;
   margin-bottom: 22px;
-  backdrop-filter: blur(10px);
 }
 
 .panel p {
   font-size: 14px;
   line-height: 1.6;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 /* ===== BUTTONS ===== */
 .btn {
   display: block;
   width: 100%;
-  padding: 17px;
-  margin-top: 16px;
-  border-radius: 12px;
+  padding: 16px;
+  margin-top: 14px;
+  border-radius: 10px;
   font-weight: bold;
-  letter-spacing: 1.4px;
+  letter-spacing: 1.3px;
   text-decoration: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255,255,255,0.35),
-    transparent
-  );
-  animation: scan 3s infinite;
-}
-
-@keyframes scan {
-  0% { left: -100%; }
-  100% { left: 100%; }
 }
 
 .btn-telegram {
-  background: linear-gradient(90deg, #0088cc, #00aaff);
+  background: #0088cc;
   color: #fff;
 }
 
 .btn-earn {
-  background: linear-gradient(90deg, #ffcc00, #ffb700);
+  background: #ffcc00;
   color: #000;
 }
 
-.btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(0,255,136,0.35);
-}
-
+/* ===== FOOTER ===== */
 .footer {
-  margin-top: 26px;
+  margin-top: 22px;
   font-size: 11px;
-  letter-spacing: 1.4px;
   opacity: 0.5;
 }
 </style>
@@ -182,78 +147,75 @@ canvas {
 
 <canvas id="matrix"></canvas>
 
-<div class="loader">
-  <span>ACCESS CHECK</span>
+<div class="loader" id="loader">
+  <span id="loadText">INITIALIZING SYSTEM</span>
 </div>
 
 <div class="container">
-
-  <div class="avatar">
-    <img src="avatar.png" alt="LABGATE">
-  </div>
-
+  <div class="avatar"><img src="avatar.png"></div>
   <div class="logo">LABGATE</div>
   <div class="subtitle">SYSTEM · ACCESS · PROFIT</div>
 
   <div class="panel">
     <p>
-      System detected.<br>
-      Access available.<br><br>
-      Learn how money flows.<br>
-      Or stay inside the loop.
+      This is not a course.<br>
+      This is not a job.<br><br>
+      This is access to systems<br>
+      that generate income online.<br><br>
+      You either learn how money flows —<br>
+      or you stay inside the loop.
     </p>
   </div>
 
   <a class="btn btn-telegram" href="https://t.me/+mKNs8Hmv9ytjZDdk" target="_blank">
-    > ENTER TELEGRAM
+    ENTER TELEGRAM
   </a>
 
   <a class="btn btn-earn" href="https://freecash.com/r/TP9VD" target="_blank">
-    > UNLOCK EARNINGS
+    UNLOCK EARNINGS
   </a>
 
-  <div class="footer">
-    ACCESS GRANTED
-  </div>
-
+  <div class="footer">ACCESS GRANTED</div>
 </div>
 
 <script>
+const texts = [
+  "INITIALIZING SYSTEM",
+  "CHECKING ACCESS",
+  "ACCESS GRANTED"
+];
+let i = 0;
+const el = document.getElementById("loadText");
+
+setInterval(() => {
+  i++;
+  if (i < texts.length) el.textContent = texts[i];
+  if (i === texts.length) {
+    document.getElementById("loader").style.display = "none";
+  }
+}, 900);
+
+// MATRIX
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const chars = "01ACCESSPROFITSYSTEM";
-const fontSize = 14;
-const columns = canvas.width / fontSize;
-const drops = Array(Math.floor(columns)).fill(1);
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+const chars = "01SYSTEMACCESS";
+const drops = Array(Math.floor(canvas.width / 14)).fill(1);
 
 function draw() {
   ctx.fillStyle = "rgba(0,0,0,0.08)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+  ctx.fillRect(0,0,canvas.width,canvas.height);
   ctx.fillStyle = "#00ff88";
-  ctx.font = fontSize + "px monospace";
-
-  for (let i = 0; i < drops.length; i++) {
-    const text = chars[Math.floor(Math.random() * chars.length)];
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.985) {
-      drops[i] = 0;
-    }
+  ctx.font = "14px monospace";
+  drops.forEach((y,i)=>{
+    const text = chars[Math.floor(Math.random()*chars.length)];
+    ctx.fillText(text, i*14, y*14);
+    if (y*14 > canvas.height && Math.random()>0.985) drops[i]=0;
     drops[i]++;
-  }
+  });
 }
-
-setInterval(draw, 50);
-
-window.onresize = () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-};
+setInterval(draw,50);
 </script>
 
 </body>
